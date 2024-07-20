@@ -1,46 +1,63 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int vizinhos(const vector<string>& grid, int x, int y, int N) {
-    int liveCount = 0;
-    for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue;
-            int nx = x + dx, ny = y + dy;
-            if (nx >= 0 && nx < N && ny >= 0 && ny < N && grid[nx][ny] == '1') {
-                ++liveCount;
-            }
-        }
-    }
-    return liveCount;
-}
+//one-indexed
+int n, q, game[55][55], newgame[55][55];
 
 int main() {
-    int N, Q;
-    cin >> N >> Q;
-    vector<string> m(N);
-    vector<string> nextm(N);
+    cin >> n >> q;
 
-    for (int i = 0; i < N; ++i) {
-        cin >> m[i];
+    for(int i=1;i<=n;i++){
+        string s;
+        cin >> s;
+
+        for(int j=1;j<=n;j++){
+            if(s[j-1] == '1'){game[i][j] = 1;}
+            else game[i][j] = 0;
+        }
     }
 
-    for (int q = 0; q < Q; ++q) {
-        nextm = m;
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
-                int liveC = vizinhos(m, i, j, N);
-                if (m[i][j] == '1') {
-                    nextm[i][j] = (liveC == 2 || liveC == 3) ? '1' : '0';
-                } else {
-                    nextm[i][j] = (liveC == 3) ? '1' : '0';
+    for(int operations=1;operations<=q;operations++){
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                int life = 0;
+                life+=game[i-1][j-1];
+                life+=game[i-1][j];
+                life+=game[i-1][j+1];
+                life+=game[i][j-1];
+                life+=game[i][j+1];
+                life+=game[i+1][j-1];
+                life+=game[i+1][j];
+                life+=game[i+1][j+1];
+                
+                if(game[i][j] == 0){
+                    if(life == 3){
+                        newgame[i][j] = 1;
+                    }else{
+                        newgame[i][j] = 0;
+                    }
+                }else{
+                    if(life==2 || life==3){
+                        newgame[i][j] = 1;
+                    }else{
+                        newgame[i][j] = 0;
+                    }
                 }
+
             }
         }
-        m = nextm;
+        for(int k=1;k<=n;k++){
+            for(int l=1;l<=n;l++){
+                game[k][l] = newgame[k][l];
+            }
+        }
     }
-    for (int i = 0; i < N; ++i) {
-        cout << m[i] << endl;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cout << game[i][j];
+        }
+        cout << endl;
     }
 
     return 0;

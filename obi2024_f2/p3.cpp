@@ -34,6 +34,9 @@ int main()
     {
         for(ll j=0;j<M;j++)
         {
+            // Esta formula calcula qual sera o numero dado seu index
+            // É necessário somar 1 porque neste código a matriz é 0-indexado, porém 
+            // o problema espera a saída com uma matriz 1-indexado
             cout << (lines[i]*M + columns[j]+1) << " ";
         }
         cout << "\n";
